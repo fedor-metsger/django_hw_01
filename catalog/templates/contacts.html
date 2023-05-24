@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Контактная информация</title>
+</head>
+<body>
+    <h1>Контактная информация:</h1>
+
+<form method="post">
+	{% csrf_token %}
+
+    <p>Имя:</p><input name="name" />
+    <p>Телефон:</p><input name="phone" />
+    <p>e-mail:</p><input name="email" />
+    <p>
+    <input type="submit" value="Отправить" />
+</form>
+    <p>
+    <a href="/"><-Назад</a>
+
+</body>
+</html>
