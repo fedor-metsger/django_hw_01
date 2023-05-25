@@ -7,11 +7,34 @@
 <body>
     <h1>Контактная информация:</h1>
 
+        <table class="u-full-width" border="1">
+        <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Номер телефона</th>
+            <th>e-mail</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for c in contacts %}
+            <tr>
+                <td>{{ c.name }}</td>
+                <td>{{ c.phone }}</td>
+                <td>{{ c.email }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{#    {% for c in contacts %}#}
+{#        <p>Имя: {{ c.name }} Телефон: {{ c.phone }} e-mail: {{ c.email }}</p>#}
+{#    {% endfor %}#}
+
+    <h1>Добавить контакт:</h1>
 <form method="post">
 	{% csrf_token %}
 
     <p>Имя:</p><input name="name" />
-    <p>Телефон:</p><input name="phone" />
+    <p>Номер телефона:</p><input name="phone" />
     <p>e-mail:</p><input name="email" />
     <p>
     <input type="submit" value="Отправить" />
