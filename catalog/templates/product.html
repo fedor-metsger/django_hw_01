@@ -1,0 +1,42 @@
+{% extends "dogs/base.html" %}
+
+{% block content %}
+    {% load my_tags %}
+
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-3">{{ bread }}</h1>
+        </div>
+    </div>
+    <div class="album py-5 bg-light">
+        <div class="container">
+                <div class="row">
+                    <div class="card mb-4 box-shadow">
+                        <div class="card-body">
+                            <table class="u-full-width">
+                                <tr>
+                                    <td><h2>{{ product.name|title }}</h2>
+                                        <br>
+                                        <p>Цена:</p>
+                                        <p>{{ product.price }}р.</p>
+                                        <br>
+                                        <p>Дата заведения:</p>
+                                        <p>{{ product.creation_date }}</p>
+                                        <br>
+                                        <p>Дата последнего изменения:</p>
+                                        <p>{{ product.modification_date }}</p>
+                                    </td>
+                                    <td>
+                                        <img src={{ product.photo|media_filter }} height="300">
+                                    </td>
+                                    <td>
+                                        <p>{{ product.description }}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+{% endblock %}
