@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Title</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap.min.css" rel="stylesheet">
+
+    <link href="/static/album.css" rel="stylesheet"
+</head>
+
+<body>
+
+{#<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">#}
+{#    <a class="navbar-brand" href="#">Navbar</a>#}
+{#    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"#}
+{#            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">#}
+{#        <span class="navbar-toggler-icon"></span>#}
+{#    </button>#}
+<header>
+    <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                    <h4 class="text-white">Страничка о собаках</h4>
+                    <p class="text-muted">Сделана в рамках подготовки к практической работе по занятию 20.2
+                        Шаблонизация</p>
+                </div>
+                <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Выберите:</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-white">Главная страница</a></li>
+                        <li><a href="/dogs/" class="text-white">Страница о собаках</a></li>
+                        <li><a href="/dogs/breed/" class="text-white">Список всех пород</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="navbar navbar-dark bg-dark box-shadow">
+        <div class="container d-flex justify-content-between">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                {#            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>#}
+                <strong><- На главную</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+</header>
+
+</nav>
+<main role="main">
+    {% block content %}
+        {# блок, который нужно будет расширять в шаблоне #}
+    {% endblock %}
+</main>
+
+<footer class="container">
+    <p>©2023</p>
+</footer>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="/static/jquery-3.2.1.slim.min.js"></script>
+<script src="/static/popper.min.js"></script>
+<script src="/static/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{% extends "dogs/base.html" %}
+
+{% block content %}
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-3">Породы</h1>
+        </div>
+    </div>
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                {% for b in breeds %}
+                    <div class="col-md-4">
+                        <div class="card mb-4 box-shadow">
+                            <div class="card-body">
+                                <h2 href="breed/{{ b.id }}">{{ b.name }}</h2>
+                                <br>
+                                <p class="card-text">{{ b.description|slice:150 }}...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <form action="breed/{{ b.id }}">
+                                            <input type="submit" value="Перейти"/>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
