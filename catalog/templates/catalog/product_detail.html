@@ -15,22 +15,22 @@
                         <div class="card-body">
                             <table class="u-full-width">
                                 <tr>
-                                    <td><h2>{{ product.name|title }}</h2>
+                                    <td><h2>{{ object.name|title }}</h2>
                                         <br>
                                         <p>Цена:</p>
-                                        <p>{{ product.price }}р.</p>
+                                        <p>{{ object.price }}р.</p>
                                         <br>
                                         <p>Дата заведения:</p>
-                                        <p>{{ product.creation_date }}</p>
+                                        <p>{{ object.creation_date }}</p>
                                         <br>
                                         <p>Дата последнего изменения:</p>
-                                        <p>{{ product.modification_date }}</p>
+                                        <p>{{ object.modification_date }}</p>
                                     </td>
                                     <td>
-                                        <img src={{ product.photo|media_filter }} height="300">
+                                        <img src={{ object.photo|media_filter }} height="300">
                                     </td>
                                     <td>
-                                        <p>{{ product.description }}</p>
+                                        <p>{{ object.description }}</p>
                                     </td>
                                 </tr>
                             </table>
