@@ -1,7 +1,10 @@
 
+from datetime import datetime
+
 from django.http import HttpResponse
-from django.shortcuts import render
-from django.views.generic import DetailView, ListView
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView, CreateView, DeleteView, UpdateView
 
 from catalog.models import Contact, Product
 

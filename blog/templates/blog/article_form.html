@@ -1,0 +1,47 @@
+{% extends "dogs/base.html" %}
+
+{% block content %}
+    {% load my_tags %}
+
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-3">{{ object.title }}</h1>
+        </div>
+    </div>
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-body">
+                        <table class="u-full-width">
+                            <tr>
+                                <form method="post">
+	                                {% csrf_token %}
+                                    <br>
+                                    <label>Заголовок:</label><br><input name="title" value="{{ object.title }}" />
+                                    <br><br>
+                                    {% if object.slug %}
+                                        <label>slug:</label><br><input name="slug" value="{{ object.slug }}" />
+                                        <br><br>
+                                    {% endif %}
+                                    <label>Опубликовано:</label><br>
+                                    {% if object.published %}
+                                        <input name="published" type="checkbox" checked />
+                                    {% else %}
+                                        <input name="published" type="checkbox" />
+                                    {% endif %}
+                                    <br><br>
+                                    <label>Содержимое:</label>
+                                    <br>
+                                    <textarea name="content" cols="80" rows="10">{{ object.content }}</textarea>
+                                    <br><br>
+                                    <input type="submit" value="Отправить" />
+                                </form>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
