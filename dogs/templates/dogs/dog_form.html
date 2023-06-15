@@ -1,0 +1,40 @@
+{% extends "dogs/base.html" %}
+
+{% block content %}
+    {% load my_tags %}
+
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-3">{{ object.name|title }}</h1>
+        </div>
+    </div>
+
+    <div class=" album py-5 bg-light">
+        <div class="container">
+            {#            <a href="{% url "dogs:dog_create" %}" class="btn btn-primary">Создать новую запись</a>#}
+            {#            <br><br>#}
+            {#            <div class="row">#}
+            <form method="post" class="row">
+                {% csrf_token %}
+                <div class="card mb-4 box-shadow">
+                    <div class="card-body">
+                        {{ form.as_p }}
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Сохранить">
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Предки:</h3>
+                            {{ formset.management_form }}
+                            {% for form in formset.forms %}
+                                {{ form.as_p }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+            {#            </div>#}
+        </div>
+    </div>
+{% endblock %}

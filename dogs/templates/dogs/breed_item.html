@@ -8,8 +8,11 @@
             <h1 class="display-3">{{ bread }}</h1>
         </div>
     </div>
-    <div class="album py-5 bg-light">
+
+    <div class=" album py-5 bg-light">
         <div class="container">
+            <a href="{% url "dogs:dog_create" breed_id %}" class="btn btn-primary">Создать новую запись</a>
+            <br><br>
             {% for d in dogs %}
                 <div class="row">
                     {#                    <div class="col-md-4">#}
@@ -20,6 +23,7 @@
                                     <td><h2>{{ d.name|title }}</h2>
                                         <br>
                                         <h3>{{ d.birthdate }}</h3>
+                                        <a href="{% url "dogs:dog_update" d.id %}" class="btn btn-warning">Изменить</a>
                                     </td>
                                     <td>
                                         <img src={{ d.photo|media_filter }} width="500">

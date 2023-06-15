@@ -26,3 +26,17 @@ class Dog(models.Model):
     class Meta:
         verbose_name = 'собака'
         verbose_name_plural = 'собаки'
+
+class Ancestor(models.Model):
+    dog = models.ForeignKey(Dog, on_delete=models.CASCADE)
+    name = models.CharField(max_length=150, verbose_name='кличка')
+    breed = models.ForeignKey(Breed, on_delete=models.CASCADE)
+    birthdate = models.DateField(verbose_name='дата рождения', null=True, blank=True)
+
+    def __str__(self):
+        return f'Ancestor({self.name, self.breed})'
+        # return self.name
+
+    class Meta:
+        verbose_name = 'предок'
+        verbose_name_plural = 'предки'
