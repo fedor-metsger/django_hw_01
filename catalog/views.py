@@ -1,12 +1,11 @@
 
-from datetime import datetime
-
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, DeleteView, UpdateView
+from django.forms import inlineformset_factory
 
 from catalog.models import Contact, Product
+from catalog.forms import ProductForm
 
 class ProductListView(ListView):
     model = Product
@@ -34,3 +33,8 @@ def contacts(request):
         context["contacts"].append({"name": c.name, "phone": c.phone, "email": c.email})
 
     return render(request, "contacts.html", context=context)
+
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('catalog:index')

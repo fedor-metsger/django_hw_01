@@ -21,8 +21,8 @@ class Product(models.Model):
     photo = models.ImageField(verbose_name='изображение', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2,  verbose_name='цена')
-    creation_date = models.DateField(verbose_name='дата создания')
-    modification_date = models.DateField(verbose_name='дата последнего изменения')
+    creation_date = models.DateField(verbose_name='дата создания', auto_now_add=True)
+    modification_date = models.DateField(verbose_name='дата последнего изменения', auto_now=True)
 
     def __str__(self):
         return f'Product({self.name})'
