@@ -24,6 +24,15 @@ class Product(models.Model):
     creation_date = models.DateField(verbose_name='дата создания', auto_now_add=True)
     modification_date = models.DateField(verbose_name='дата последнего изменения', auto_now=True)
 
+    @property
+    def active_version(self):
+        current_versions = self.version_set.filter(current=True)
+        if len(current_versions):
+            if current_versions[0].name:
+                return f'{current_versions[0].name} - {current_versions[0].number}'
+            return f'{current_versions[0].number}'
+        else: return None
+
     def __str__(self):
         return f'Product({self.name})'
 
@@ -45,3 +54,16 @@ class Contact(models.Model):
         verbose_name = 'контакт'
         verbose_name_plural = 'контакты'
 
+class Version(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='продукт')
+    number = models.IntegerField(blank=False, null=False, verbose_name='номер')
+    name = models.CharField(max_length=150, verbose_name='имя')
+    current = models.BooleanField(verbose_name='текущая')
+
+    def __str__(self):
+        # return f'Version({self.name})'
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name = 'версия'
+        verbose_name_plural = 'версии'
