@@ -1,10 +1,21 @@
 
-from django.forms import models, forms
-
+from django.forms import models, forms, BaseInlineFormSet
 from catalog.models import Product, Version
 
 BLOCKED_WORDS = {"казино", "криптовалюта", "крипта", "биржа",
                  "дешево", "бесплатно", "обман", "полиция", "радар", "дёшево"}
+
+class VersionFormFormSet(BaseInlineFormSet):
+    def clean(self):
+        curr = False
+        for f in self.forms:
+            if "current" in f.cleaned_data and f.cleaned_data["current"]:
+                if not curr:
+                    curr = True
+                else:
+                    raise forms.ValidationError("Может быть только одна активная версия продукта!")
+        return super().clean()
+
 class ProductForm(models.ModelForm):
     class Meta:
         model = Product

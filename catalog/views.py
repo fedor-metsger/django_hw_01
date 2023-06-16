@@ -2,10 +2,12 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, DeleteView, UpdateView
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, ValidationError
+from django.contrib import messages
 
 from catalog.models import Contact, Product, Version
-from catalog.forms import ProductForm, VersionForm
+from catalog.forms import ProductForm, VersionForm, VersionFormFormSet
+
 
 class ProductListView(ListView):
     model = Product
@@ -48,7 +50,8 @@ class ProductUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        VersionFormSet = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        VersionFormSet = inlineformset_factory(Product, Version, form=VersionForm,
+                                               formset = VersionFormFormSet, extra=1)
         if self.request.method == "POST":
             context_data["formset"] = VersionFormSet(self.request.POST, instance=self.object)
         else:
@@ -57,6 +60,14 @@ class ProductUpdateView(UpdateView):
 
     def form_valid(self, form):
         formset = self.get_context_data()["formset"]
+
+        # curr = False
+        # for f in formset.forms:
+        #     if f.instance and f.instance.current:
+        #         if not curr: curr = True
+        #         else:
+        #             f.add_error(None, "Может быть только одна активная версия продукта!")
+        #             return self.form_invalid(f)
         self.object = form.save()
         if formset.is_valid():
             formset.instance = self.object
