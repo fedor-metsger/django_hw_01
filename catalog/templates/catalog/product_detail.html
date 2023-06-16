@@ -35,6 +35,10 @@
                                 </tr>
                             </table>
                         </div>
+                        <div class="card-footer">
+                        <a href="{% url "catalog:product_update" object.id %}" class="btn btn-warning">Изменить</a>
+                        <a href="{% url "catalog:product_delete" object.id %}" class="btn btn-danger">Удалить</a>
+                        </div>
                     </div>
                 </div>
         </div>

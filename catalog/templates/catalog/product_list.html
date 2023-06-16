@@ -1,20 +1,23 @@
-
 {% extends "dogs/base.html" %}
 
 {% block content %}
-    <div class="jumbotron">
-        <div class="container">
-            <h1 class="display-3">Главная страница</h1>
-        </div>
+    <div class="container">
+        <h1 class="display-3">Главная страница</h1>
     </div>
     <div class="album py-5 bg-light">
         <div class="container">
+            <a href="{% url "catalog:product_create" %}" class="btn btn-primary">Создать новую запись</a>
+            <br><br>
             <div class="row">
                 {% for p in object_list %}
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
                             <div class="card-body">
                                 <h2 href="product/{{ p.id }}">{{ p.name }}</h2>
+                                <br>
+                                {% if p.active_version %}
+                                    <p class="badge-info">Версия: {{ p.active_version }}</p>
+                                {% endif %}
                                 <br>
                                 <p class="card-text">{{ p.description|slice:100 }}...</p>
                                 <div class="d-flex justify-content-between align-items-center">
