@@ -27,7 +27,6 @@
                     <div class="card-header">Версии:</div>
                 {% endif %}
                 <div class="card-body">
-{#                    {{ formset.non_form_errors }}#}
                     {{ formset.management_form }}
                     {% for form in formset.forms %}
                         {{ form.as_p }}

@@ -1,12 +1,12 @@
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, DeleteView, UpdateView
-from django.forms import inlineformset_factory, ValidationError
-from django.contrib import messages
+from django.forms import inlineformset_factory
+from django.core.exceptions import ValidationError
 
 from catalog.models import Contact, Product, Version
-from catalog.forms import ProductForm, VersionForm, VersionFormFormSet
+from catalog.forms import ProductForm, VersionForm
 
 
 class ProductListView(ListView):
@@ -48,26 +48,37 @@ class ProductUpdateView(UpdateView):
     def get_success_url(self, *args, **kwargs):
         return reverse_lazy('catalog:product', kwargs = {'pk': self.object.id})
 
+    def get_formset(self):
+        VersionFormSet = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+
+        if self.request.method == "POST":
+            return VersionFormSet(self.request.POST, instance=self.object)
+        else:
+            return VersionFormSet(instance=self.object)
+
+    def form_invalid(self, form):
+        self.formset = self.get_formset()
+        self.formset.is_valid()
+        return super().form_invalid(form)
+
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        VersionFormSet = inlineformset_factory(Product, Version, form=VersionForm,
-                                               formset = VersionFormFormSet, extra=1)
-        if self.request.method == "POST":
-            context_data["formset"] = VersionFormSet(self.request.POST, instance=self.object)
-        else:
-            context_data["formset"] = VersionFormSet(instance=self.object)
+        context_data['formset'] = getattr(self, 'formset', self.get_formset())
+
         return context_data
 
     def form_valid(self, form):
-        formset = self.get_context_data()["formset"]
+        formset = self.get_formset()
 
-        # curr = False
-        # for f in formset.forms:
-        #     if f.instance and f.instance.current:
-        #         if not curr: curr = True
-        #         else:
-        #             f.add_error(None, "Может быть только одна активная версия продукта!")
-        #             return self.form_invalid(f)
+        curr = False
+        for f in formset.forms:
+            print(f)
+            if "current" in f.cleaned_data:
+                if f.cleaned_data["current"]:
+                    if not curr: curr = True
+                    else:
+                        form.add_error(None, ValidationError("Может быть только одна активная версия продукта!"))
+                        return super().form_invalid(form)
         self.object = form.save()
         if formset.is_valid():
             formset.instance = self.object
