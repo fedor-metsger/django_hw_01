@@ -23,6 +23,8 @@
                                     <td><h2>{{ d.name|title }}</h2>
                                         <br>
                                         <h3>{{ d.birthdate }}</h3>
+
+                                        <p>Владелец: {{ d.owner }}</p>
                                         <a href="{% url "dogs:dog_update" d.id %}" class="btn btn-warning">Изменить</a>
                                     </td>
                                     <td>
@@ -37,45 +39,3 @@
         </div>
     </div>
 {% endblock %}
-
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title><!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title>Все породы</title>#}
-{#</head>#}
-{#<body>#}
-{#    {% load my_tags %}#}
-{#    <a href="../"><- К породам</a>#}
-{#    <br>#}
-{#    <h3>Породы:</h3>#}
-{##}
-{#    <table class="u-full-width" border="1">#}
-{#        <thead>#}
-{#        <tr>#}
-{#            <th>Имя</th>#}
-{#            <th>Дата рождения</th>#}
-{#            <th>Фотография</th>#}
-{#        </tr>#}
-{#        </thead>#}
-{#        <tbody>#}
-{#        {% for d in dogs %}#}
-{#            <tr>#}
-{#                <td>{{ d.name|title }}</td>#}
-{#                <td>{{ d.birthdate }}</td>#}
-{#                <td><img src=/media/{{ d.photo }} width="500"></td>#}
-{#                <td><img src={{ d.photo|media_filter }} width="500"></td>#}
-{#            </tr>#}
-{#        {% endfor %}#}
-{#        </tbody>#}
-{#    </table>#}
-{#</body>#}
-{#</html></title>#}
-{#</head>#}
-{#<body>#}
-{#</body>#}
-{#</html>#}

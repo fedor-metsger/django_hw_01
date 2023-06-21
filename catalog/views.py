@@ -72,7 +72,6 @@ class ProductUpdateView(UpdateView):
 
         curr = False
         for f in formset.forms:
-            print(f)
             if "current" in f.cleaned_data:
                 if f.cleaned_data["current"]:
                     if not curr: curr = True

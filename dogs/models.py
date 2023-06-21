@@ -1,4 +1,7 @@
+
 from django.db import models
+
+from users.models import User
 
 # Create your models here.
 class Breed(models.Model):
@@ -18,6 +21,7 @@ class Dog(models.Model):
     breed = models.ForeignKey(Breed, on_delete=models.CASCADE)
     photo = models.ImageField(verbose_name='фотография', null=True, blank=True)
     birthdate = models.DateField(verbose_name='дата рождения', null=True, blank=True)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f'Dog({self.name, self.breed})'

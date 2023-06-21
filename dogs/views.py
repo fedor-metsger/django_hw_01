@@ -25,6 +25,7 @@ def breed_item(request, pk):
     context = {
         "breed": breed,
         "breed_id": pk,
+        "owner_id": request.user.id,
         "dogs": Dog.objects.filter(breed_id=pk)
     }
     return render(request, "dogs/breed_item.html", context=context)
@@ -37,6 +38,8 @@ class DogCreateView(CreateView):
         kwargs = super().get_form_kwargs()
         breed_id = self.kwargs["breed_id"]
         kwargs.update({'breed_id': breed_id})
+        owner_id = self.request.user.id
+        kwargs.update({'owner_id': owner_id})
         return kwargs
 
     def get_success_url(self, *args, **kwargs):
@@ -50,6 +53,9 @@ class DogUpdateView(UpdateView):
         kwargs = super().get_form_kwargs()
         self.breed_id = Dog.objects.get(pk=self.kwargs["pk"]).breed.id
         kwargs.update({'breed_id': self.breed_id})
+        # owner_id = self.request.user.id
+        owner_id = None
+        kwargs.update({'owner_id': owner_id})
         return kwargs
 
     def get_success_url(self, *args, **kwargs):
