@@ -39,8 +39,12 @@
                         <li><a href="/dogs/" class="text-white">Страница о собаках</a></li>
                         <li><a href="/dogs/breed/" class="text-white">Список всех пород</a></li>
                         {% if user.is_authenticated %}
-                            <li><a href="/user/{{ user.id }}/update/" class="text-white">Редактирование профиля</a></li>
-                            <li><a href="/user/logout/" class="text-white">Выйти</a></li>
+                            {% if user.activated %}
+                                <li><a href="/user/{{ user.id }}/update/" class="text-white">Редактирование профиля</a></li>
+                                <li><a href="/user/logout/" class="text-white">Выйти</a></li>
+                            {% else %}
+                                <li><a href="/user/{{ user.id }}/activation/" class="text-white">Активация профиля</a></li>
+                            {% endif %}
                         {% else %}
                             <li><a href="/user/" class="text-white">Войти</a></li>
                             <li><a href="/user/register/" class="text-white">Регистрация</a></li>

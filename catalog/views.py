@@ -4,12 +4,16 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, DeleteView, UpdateView
 from django.forms import inlineformset_factory
 from django.core.exceptions import ValidationError
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from catalog.models import Contact, Product, Version
 from catalog.forms import ProductForm, VersionForm
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
+    login_url = reverse_lazy('user:login')
+    redirect_field_name = "redirect_to"
+
     model = Product
     extra_context = {
         'title': 'Главная страница'
@@ -36,12 +40,18 @@ def contacts(request):
 
     return render(request, "contacts.html", context=context)
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:index')
 
-class ProductUpdateView(UpdateView):
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        owner_id = self.request.user.id
+        kwargs.update({'owner_id': owner_id})
+        return kwargs
+
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
 
@@ -72,7 +82,7 @@ class ProductUpdateView(UpdateView):
 
         curr = False
         for f in formset.forms:
-            if "current" in f.cleaned_data:
+            if "cleaned_data" in f and "current" in f.cleaned_data:
                 if f.cleaned_data["current"]:
                     if not curr: curr = True
                     else:
@@ -84,6 +94,6 @@ class ProductUpdateView(UpdateView):
             formset.save()
         return super().form_valid(form)
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy("catalog:index")

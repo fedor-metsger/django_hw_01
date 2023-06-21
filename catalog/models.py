@@ -1,6 +1,8 @@
 
 from django.db import models
 
+from users.models import User
+
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=150, verbose_name='наименование')
@@ -23,6 +25,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2,  verbose_name='цена')
     creation_date = models.DateField(verbose_name='дата создания', auto_now_add=True)
     modification_date = models.DateField(verbose_name='дата последнего изменения', auto_now=True)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     @property
     def active_version(self):
