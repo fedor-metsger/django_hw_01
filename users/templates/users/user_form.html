@@ -1,0 +1,26 @@
+{% extends "dogs/base.html" %}
+
+{% block content %}
+    {% load my_tags %}
+
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-4">Редактировани профиля</h1>
+        </div>
+    </div>
+
+    <div class=" album py-5 bg-light">
+        <div class="container">
+            <form method="post" class="row" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card mb-4 box-shadow">
+                    <div class="card-body">
+                        {{ form.as_p }}
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Сохранить</button>
+                    <a href="{% url "user:password" object.id %}" class="btn btn-warning">Сгенерировать новый пароль</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -25,6 +25,11 @@
                                         <br>
                                         <p>Дата последнего изменения:</p>
                                         <p>{{ object.modification_date }}</p>
+                                        {% if object.owner %}
+                                            <br>
+                                            <p>Кем создан:</p>
+                                            <p class="badge-info">{{ object.owner }}</p>
+                                        {% endif %}
                                     </td>
                                     <td>
                                         <img src={{ object.photo|media_filter }} height="300">

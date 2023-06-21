@@ -1,32 +1,32 @@
 
 from django.forms import models, forms, BaseInlineFormSet
 from django.core.exceptions import ValidationError
+
 from catalog.models import Product, Version
+from users.models import User
 
 BLOCKED_WORDS = {"казино", "криптовалюта", "крипта", "биржа",
                  "дешево", "бесплатно", "обман", "полиция", "радар", "дёшево"}
 
-# class VersionFormFormSet(BaseInlineFormSet):
-#     def clean(self):
-#         curr = False
-#         for f in self.forms:
-#             if "current" in f.cleaned_data and f.cleaned_data["current"]:
-#                 if not curr:
-#                     curr = True
-#                 else:
-#                     raise forms.ValidationError("Может быть только одна активная версия продукта!")
-#         return super().clean()
-
 class ProductForm(models.ModelForm):
     class Meta:
         model = Product
-        exclude = ("creation_date", "modification_date")
+        exclude = ("creation_date", "modification_date", "owner")
 
     def __init__(self, *args, **kwargs):
+        self.owner_id = None
+        if "owner_id" in kwargs:
+            self.owner_id = kwargs["owner_id"]
+            del kwargs["owner_id"]
         super().__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
             field.widget.attrs["class"] = "form-control"
+
+    def save(self, *args, **kwargs):
+        if self.owner_id:
+            self.instance.owner = User.objects.get(pk=self.owner_id)
+        return super().save(*args, **kwargs)
 
     def clean_name(self):
         cleaned_data = self.cleaned_data["name"]
@@ -49,19 +49,8 @@ class VersionForm(models.ModelForm):
         model = Version
         exclude = ("product",)
 
-    # current_count = 0
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.fields["name"].widget.attrs["class"] = "form-control"
         self.fields["number"].widget.attrs["class"] = "form-control"
-
-    # def clean_current(self):
-    #     cleaned_data = self.cleaned_data["current"]
-    #     if self.cleaned_data["current"]:
-    #         self.current_count += 1
-    #     if self.current_count > 1:
-    #         raise ValidationError("Может быть только одна активная версия продукта!")
-    #
-    #     return cleaned_data

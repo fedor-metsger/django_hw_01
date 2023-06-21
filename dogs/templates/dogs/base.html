@@ -27,17 +27,28 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8 col-md-7 py-4">
-                    <h4 class="text-white">Страничка о собаках</h4>
-                    <p class="text-muted">Сделана в рамках подготовки к практической работе по занятию 20.2
-                        Шаблонизация</p>
+                    <h4 class="text-white">Учебный проект на Django</h4>
+                    <p class="text-muted">Сделан в рамках курса "Основы веб-разработки
+                        на Django"</p>
                 </div>
                 <div class="col-sm-4 offset-md-1 py-4">
                     <h4 class="text-white">Выберите:</h4>
                     <ul class="list-unstyled">
-                        <li><a href="/" class="text-white">Главная страница</a></li>
+                        <li><a href="/" class="text-white">Перечень товаров</a></li>
                         <li><a href="/article/" class="text-white">Блог</a></l>
                         <li><a href="/dogs/" class="text-white">Страница о собаках</a></li>
                         <li><a href="/dogs/breed/" class="text-white">Список всех пород</a></li>
+                        {% if user.is_authenticated %}
+                            {% if user.activated %}
+                                <li><a href="/user/{{ user.id }}/update/" class="text-white">Редактирование профиля</a></li>
+                                <li><a href="/user/logout/" class="text-white">Выйти</a></li>
+                            {% else %}
+                                <li><a href="/user/{{ user.id }}/activation/" class="text-white">Активация профиля</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li><a href="/user/" class="text-white">Войти</a></li>
+                            <li><a href="/user/register/" class="text-white">Регистрация</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
