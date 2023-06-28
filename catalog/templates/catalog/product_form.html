@@ -22,20 +22,22 @@
                     <input type="submit" class="btn btn-primary" value="Сохранить">
                 </div>
             </div>
-            <div class="card col-6">
-                {% if object %}
-                    <div class="card-header">Версии:</div>
-                {% endif %}
-                <div class="card-body">
-                    {{ formset.management_form }}
-                    {% for form in formset.forms %}
-                        {{ form.as_p }}
-                        {% if not forloop.last %}
-                            <hr>
-                        {% endif %}
-                    {% endfor %}
+            {% if owner %}
+                <div class="card col-6">
+                    {% if object %}
+                        <div class="card-header">Версии:</div>
+                    {% endif %}
+                    <div class="card-body">
+                        {{ formset.management_form }}
+                        {% for form in formset.forms %}
+                            {{ form.as_p }}
+                            {% if not forloop.last %}
+                                <hr>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </form>
     </div>
 {% endblock %}

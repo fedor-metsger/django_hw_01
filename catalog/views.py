@@ -85,6 +85,8 @@ class ProductUpdateView(UserPassesTestMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['formset'] = getattr(self, 'formset', self.get_formset())
+        obj = self.get_object()
+        context_data["owner"] = obj.owner_id == self.request.user.id
         return context_data
 
     def get_form_kwargs(self):
