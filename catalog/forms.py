@@ -13,15 +13,19 @@ class ProductForm(models.ModelForm):
         model = Product
         exclude = ("creation_date", "modification_date", "owner")
 
-    def __init__(self, *args, **kwargs):
-        self.owner_id = None
-        if "owner_id" in kwargs:
-            self.owner_id = kwargs["owner_id"]
-            del kwargs["owner_id"]
+    def __init__(self, *args, owner_id=None, moderator=None, owner=None, **kwargs):
+        self.owner_id = owner_id
+        self.moderator = moderator
         super().__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
-            field.widget.attrs["class"] = "form-control"
+            if moderator:
+                if not owner and field_name not in {"description", "category"}:
+                    field.disabled = True
+            if field_name != "published":
+                field.widget.attrs["class"] = "form-control"
+            else:
+                field.disabled = not moderator
 
     def save(self, *args, **kwargs):
         if self.owner_id:

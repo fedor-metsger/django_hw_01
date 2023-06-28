@@ -10,42 +10,44 @@
     </div>
     <div class="album py-5 bg-light">
         <div class="container">
-                <div class="row">
-                    <div class="card mb-4 box-shadow">
-                        <div class="card-body">
-                            <table class="u-full-width">
-                                <tr>
-                                    <td><h2>{{ object.name|title }}</h2>
-                                        <br>
-                                        <p>Цена:</p>
-                                        <p>{{ object.price }}р.</p>
-                                        <br>
-                                        <p>Дата заведения:</p>
-                                        <p>{{ object.creation_date }}</p>
-                                        <br>
-                                        <p>Дата последнего изменения:</p>
-                                        <p>{{ object.modification_date }}</p>
-                                        {% if object.owner %}
-                                            <br>
-                                            <p>Кем создан:</p>
-                                            <p class="badge-info">{{ object.owner }}</p>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <img src={{ object.photo|media_filter }} height="300">
-                                    </td>
-                                    <td>
-                                        <p>{{ object.description }}</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="card-footer">
-                        <a href="{% url "catalog:product_update" object.id %}" class="btn btn-warning">Изменить</a>
-                        <a href="{% url "catalog:product_delete" object.id %}" class="btn btn-danger">Удалить</a>
-                        </div>
+            <div class="row">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-body">
+                        <table class="u-full-width">
+                            <tr>
+                                <td><h2>{{ object.name|title }}</h2>
+                                    <br>
+                                    <p>Цена:</p>
+                                    <p>{{ object.price }}р.</p>
+                                    <br>
+                                    <p>Дата заведения:</p>
+                                    <p>{{ object.creation_date }}</p>
+                                    <br>
+                                    <p>Дата последнего изменения:</p>
+                                    <p>{{ object.modification_date }}</p>
+                                    {% if object.owner %}
+                                        <br><p>Кем создан:</p><p class="badge-info">{{ object.owner }}</p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <img src={{ object.photo|media_filter }} height="300">
+                                </td>
+                                <td>
+                                    <p>{{ object.description }}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        {% if object.owner_id == request.user.id or moderator %}
+                            <a href="{% url "catalog:product_update" object.id %}" class="btn btn-warning">Изменить</a>
+                        {% endif %}
+                        {% if object.owner_id == request.user.id %}
+                            <a href="{% url "catalog:product_delete" object.id %}" class="btn btn-danger">Удалить</a>
+                        {% endif %}
                     </div>
                 </div>
+            </div>
         </div>
     </div>
 {% endblock %}

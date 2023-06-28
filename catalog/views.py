@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, DeleteView, UpdateView
 from django.forms import inlineformset_factory
 from django.core.exceptions import ValidationError
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from catalog.models import Contact, Product, Version
 from catalog.forms import ProductForm, VersionForm
@@ -24,6 +24,11 @@ class ProductListView(LoginRequiredMixin, ListView):
 
 class ProductDetailView(DetailView):
     model = Product
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data["moderator"] = "moderator" in [i.name for i in self.request.user.groups.all()]
+        return context_data
 
 def contacts(request):
     if request.method == 'POST':
@@ -51,9 +56,15 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         kwargs.update({'owner_id': owner_id})
         return kwargs
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+class ProductUpdateView(UserPassesTestMixin, UpdateView):
     model = Product
     form_class = ProductForm
+
+    def test_func(self):
+        obj = self.get_object()
+        return self.request.user.is_authenticated and (
+                obj.owner_id == self.request.user.id or
+                "moderator" in [i.name for i in self.request.user.groups.all()])
 
     def get_success_url(self, *args, **kwargs):
         return reverse_lazy('catalog:product', kwargs = {'pk': self.object.id})
@@ -74,8 +85,14 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['formset'] = getattr(self, 'formset', self.get_formset())
-
         return context_data
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["moderator"] = "moderator" in [i.name for i in self.request.user.groups.all()]
+        obj = self.get_object()
+        kwargs["owner"] = obj.owner_id == self.request.user.id
+        return kwargs
 
     def form_valid(self, form):
         formset = self.get_formset()

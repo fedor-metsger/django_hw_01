@@ -26,6 +26,7 @@ class Product(models.Model):
     creation_date = models.DateField(verbose_name='дата создания', auto_now_add=True)
     modification_date = models.DateField(verbose_name='дата последнего изменения', auto_now=True)
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    published = models.BooleanField(default=False, verbose_name='опубликован')
 
     @property
     def active_version(self):
