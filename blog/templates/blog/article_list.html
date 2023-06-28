@@ -10,27 +10,29 @@
         <div class="container">
             <div class="btn-group">
                 <form action="/article/create/">
-                    <input type="submit" value="Добавить запись"/>
+                    {% if perms.users.edit_blog %}
+                        <input type="submit" value="Добавить запись"/>
+                    {% endif %}
                 </form>
                 <br><br>
             </div>
             {% for a in object_list %}
                 <div class="row">
-{#                    <div class="col-md-4">#}
-                        <div class="card mb-4 box-shadow">
-                            <div class="card-body">
-                                <h2 href="article/{{ a.id }}">{{ a.title }}</h2>
-                                <p>Создана: {{ a.creation_date }}</p>
-                                <p>Количество просмотров: {{ a.views }}</p>
-                                 <p class="card-text">{{ a.content }}</p>
-                                <div class="btn-group">
-                                    <form action="{{ a.id }}">
-                                        <input type="submit" value="Перейти"/>
-                                    </form>
-                                </div>
+                    {#                    <div class="col-md-4">#}
+                    <div class="card mb-4 box-shadow">
+                        <div class="card-body">
+                            <h2 href="article/{{ a.id }}">{{ a.title }}</h2>
+                            <p>Создана: {{ a.creation_date }}</p>
+                            <p>Количество просмотров: {{ a.views }}</p>
+                            <p class="card-text">{{ a.content }}</p>
+                            <div class="btn-group">
+                                <form action="{{ a.id }}">
+                                    <input type="submit" value="Перейти"/>
+                                </form>
                             </div>
                         </div>
-{#                    </div>#}
+                    </div>
+                    {#                    </div>#}
                 </div>
             {% endfor %}
         </div>

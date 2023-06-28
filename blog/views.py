@@ -1,10 +1,12 @@
 
 from datetime import datetime
 
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, DeleteView, UpdateView
 from django.utils.text import slugify
+from rolepermissions.checkers import has_permission
 
 from blog.models import Article
 
@@ -26,10 +28,13 @@ class ArticleDetailView(DetailView):
         return context
 
 
-class ArticleCreateView(CreateView):
+class ArticleCreateView(UserPassesTestMixin, CreateView):
     model = Article
     fields = ('title', 'slug', 'content',)  # Поля для заполнения при создании
     success_url = reverse_lazy('articles:list')
+
+    def test_func(self):
+        return has_permission(self.request.user, 'edit_blog')
 
     def post(self, request, *args, **kwargs):
         title = request.POST.get('title')
@@ -42,14 +47,20 @@ class ArticleCreateView(CreateView):
                                    creation_date=datetime.now(), published=True, views=0)
         return redirect('/article/')
 
-class ArticleDeleteView(DeleteView):
+class ArticleDeleteView(UserPassesTestMixin, DeleteView):
     model = Article # Модель
     success_url = reverse_lazy('articles:list') # Адрес для перенаправления после успешного удаления
 
-class ArticleUpdateView(UpdateView):
+    def test_func(self):
+        return has_permission(self.request.user, 'edit_blog')
+
+class ArticleUpdateView(UserPassesTestMixin, UpdateView):
     model = Article # Модель
     fields = ('title', 'slug', 'content',)
     success_url = reverse_lazy('articles:article')
+
+    def test_func(self):
+        return has_permission(self.request.user, 'edit_blog')
 
     def post(self, request, *args, **kwargs):
         title = request.POST.get('title')
