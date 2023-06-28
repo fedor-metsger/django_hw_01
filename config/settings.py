@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    "rolepermissions",
+
     "catalog",
     "dogs",
     "blog",
@@ -148,3 +150,5 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = "fuckup@oscarbot.ru"
 EMAIL_HOST_PASSWORD = "AsTSNVv7pun9"
 EMAIL_USE_SSL = True
+
+ROLEPERMISSIONS_MODULE = 'config.roles'
