@@ -11,7 +11,9 @@
 
     <div class=" album py-5 bg-light">
         <div class="container">
-            <a href="{% url "dogs:dog_create" breed_id %}" class="btn btn-primary">Создать новую запись</a>
+            {% if perms.dogs.add_dog %}
+                <a href="{% url "dogs:dog_create" breed_id %}" class="btn btn-primary">Создать новую запись</a>
+            {% endif %}
             <br><br>
             {% for d in dogs %}
                 <div class="row">

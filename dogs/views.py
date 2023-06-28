@@ -1,4 +1,5 @@
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import UserPassesTestMixin, PermissionRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
@@ -7,19 +8,21 @@ from django.forms import inlineformset_factory
 from dogs.models import Breed, Dog, Ancestor
 from dogs.forms import DogForm, AncestorForm
 
-
 # Create your views here.
+@login_required(login_url=reverse_lazy("user:login"))
 def index(request):
     context = {"breeds": Breed.objects.all()[:3]}
 
     # return render(request, "dogs/base.html", context=context)
     return render(request, "dogs/index.html", context=context)
 
+@login_required(login_url=reverse_lazy("user:login"))
 def breed(request):
     context = {"breeds": Breed.objects.all()}
 
     return render(request, "dogs/breeds.html", context=context)
 
+@login_required(login_url=reverse_lazy("user:login"))
 def breed_item(request, pk):
     breed = Breed.objects.filter(pk=pk)[0].name
     context = {
@@ -28,11 +31,17 @@ def breed_item(request, pk):
         "owner_id": request.user.id,
         "dogs": Dog.objects.filter(breed_id=pk)
     }
+    if "moderator" not in [i.name for i in request.user.groups.all()]:
+        context["dogs"] = context["dogs"].filter(owner_id=request.user.id)
     return render(request, "dogs/breed_item.html", context=context)
 
-class DogCreateView(CreateView):
+class DogCreateView(UserPassesTestMixin, PermissionRequiredMixin, CreateView):
     model = Dog
     form_class = DogForm
+    permission_required = "dogs.add_dog"
+
+    def test_func(self):
+        return self.request.user.is_authenticated
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -45,9 +54,13 @@ class DogCreateView(CreateView):
     def get_success_url(self, *args, **kwargs):
         return reverse_lazy('dogs:breed_item', kwargs={'pk': self.kwargs["breed_id"]})
 
-class DogUpdateView(UpdateView):
+class DogUpdateView(UserPassesTestMixin, UpdateView):
     model = Dog
     form_class = DogForm
+
+    def test_func(self):
+        obj = self.get_object()
+        return self.request.user.is_authenticated and obj.owner_id == self.request.user.id
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

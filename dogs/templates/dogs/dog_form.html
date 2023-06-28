@@ -23,15 +23,17 @@
                     <input type="submit" class="btn btn-primary" value="Сохранить">
                 </div>
                 <div class="col-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">Предки:</h3>
-                            {{ formset.management_form }}
-                            {% for form in formset.forms %}
-                                {{ form.as_p }}
-                            {% endfor %}
+                    {% if perms.dogs.change_ancestors %}
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">Предки:</h3>
+                                {{ formset.management_form }}
+                                {% for form in formset.forms %}
+                                    {{ form.as_p }}
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
             </form>
             {#            </div>#}

@@ -18,6 +18,9 @@
                                 {% if p.active_version %}
                                     <p class="badge-info">Версия: {{ p.active_version }}</p>
                                 {% endif %}
+                                {% if p.owner %}
+                                    <br>Кем создан:<p class="badge-info">{{ p.owner }}</p>
+                                {% endif %}
                                 <br>
                                 <p class="card-text">{{ p.description|slice:100 }}...</p>
                                 <div class="d-flex justify-content-between align-items-center">
